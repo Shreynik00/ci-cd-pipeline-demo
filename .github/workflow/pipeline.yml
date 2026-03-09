@@ -1,0 +1,48 @@
+name: CI-CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+
+  build-test-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout Repo
+      uses: actions/checkout@v3
+
+    - name: Setup Node
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18
+
+    - name: Install Dependencies
+      run: npm install
+
+    - name: Update Version
+      run: |
+        VERSION=$(cat version.txt)
+        echo "Current: $VERSION"
+        NEW_VERSION=$(echo $VERSION | awk -F. '{print $1"."$2"."$3+1}')
+        echo $NEW_VERSION > version.txt
+
+    - name: Run Tests
+      run: npm test
+
+    - name: Build App
+      run: echo "Build successful"
+
+    - name: Commit Version Change
+      run: |
+        git config --global user.name "github-actions"
+        git config --global user.email "actions@github.com"
+        git add version.txt
+        git commit -m "Auto update version"
+        git push
+
+    - name: Deploy
+      run: echo "Deploy step here"
