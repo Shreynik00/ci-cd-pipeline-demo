@@ -1,5 +1,5 @@
-const getVersion = require("./app")
+const { getVersion } = require("./index");
 
 test("version exists", () => {
-  expect(getVersion()).toBeTruthy()
-})
+  expect(getVersion()).toBeTruthy();
+});
