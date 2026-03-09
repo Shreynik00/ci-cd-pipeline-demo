@@ -4,4 +4,4 @@ function getVersion(){
     return fs.readFileSync("version.txt","utf8")
 }
 
-module.exports = getVersion
+module.exports = getVersiontest change
